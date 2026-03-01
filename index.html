@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduteca de Bioestadística · Videos Integrados</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f7ff 0%, #e1eef9 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .eduteca-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Encabezado */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #003366, #1a4d8c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header h1 i {
+            background: #f9c400;
+            color: #003366;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-size: 2rem;
+            box-shadow: 0 8px 16px rgba(0,51,102,0.15);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #1e3a5f;
+            max-width: 800px;
+            margin: 1rem auto 0;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(4px);
+            padding: 0.75rem 2rem;
+            border-radius: 60px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        /* Categorías */
+        .categoria {
+            margin-bottom: 3.5rem;
+        }
+
+        .categoria-titulo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #003366;
+            border-left: 6px solid #f9c400;
+            padding-left: 1.2rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .categoria-titulo i {
+            background: #003366;
+            color: #f9c400;
+            padding: 0.5rem;
+            border-radius: 16px;
+            font-size: 1.6rem;
+        }
+
+        /* Grid de videos */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem 1.8rem;
+        }
+
+        /* Tarjeta de video */
+        .video-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 12px 24px -8px rgba(0, 51, 102, 0.15);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            cursor: pointer;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 24px 36px -12px rgba(0, 51, 102, 0.3);
+            border-color: #f9c400;
+        }
+
+        /* Miniatura con icono */
+        .thumbnail {
+            background: linear-gradient(145deg, #1e3a5f, #0f2b4a);
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .thumbnail i {
+            font-size: 4rem;
+            color: rgba(249, 196, 0, 0.6);
+            transition: 0.3s;
+        }
+
+        .video-card:hover .thumbnail i {
+            color: #f9c400;
+            transform: scale(1.1);
+        }
+
+        .thumbnail .duration-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Contenido de la tarjeta */
+        .card-content {
+            padding: 1.2rem 1rem 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #003366;
+            margin-bottom: 0.4rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: #4a6f8c;
+            margin: 0.5rem 0 0.6rem;
+        }
+
+        .card-meta i {
+            width: 16px;
+            color: #f9c400;
+        }
+
+        .channel {
+            font-weight: 600;
+            background: #eef3f8;
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #1e3a5f;
+            margin-bottom: 0.5rem;
+            align-self: flex-start;
+        }
+
+        /* Overlay de vista previa (hover) */
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,51,102,0.95) 0%, rgba(0,51,102,0.8) 100%);
+            backdrop-filter: blur(3px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            color: white;
+            text-align: center;
+            border-radius: 28px;
+            pointer-events: none;
+        }
+
+        .video-card:hover .preview-overlay {
+            opacity: 1;
+        }
+
+        .preview-overlay i {
+            font-size: 3rem;
+            color: #f9c400;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+
+        .preview-overlay p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            opacity: 0.9;
+            max-width: 90%;
+            margin-bottom: 1rem;
+        }
+
+        .preview-overlay .preview-link {
+            background: #f9c400;
+            color: #003366;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            pointer-events: auto;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .preview-overlay .preview-link:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+
+        /* Modal para reproducción de video */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-contenido {
+            background: #0a1a2a;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 900px;
+            padding: 1.5rem;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+            border: 1px solid #f9c40040;
+            animation: modalAparece 0.3s ease;
+        }
+
+        @keyframes modalAparece {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f9c400;
+        }
+
+        .cerrar-modal {
+            background: none;
+            border: none;
+            color: #f9c400;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 0.5rem;
+        }
+
+        .cerrar-modal:hover {
+            color: white;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 24px;
+            background: black;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: #2c577a;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,51,102,0.2);
+            padding-top: 2rem;
+        }
+        .footer i { color: #f37021; }
+
+        /* Responsividad */
+        @media (max-width: 720px) {
+            .header h1 { font-size: 2.2rem; }
+            .categoria-titulo { font-size: 1.7rem; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 1.8rem; }
+            .categoria-titulo { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="eduteca-container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-graduation-cap"></i> Bioestadística · Videoteca
+            </h1>
+            <p><i class="fas fa-play-circle" style="color:#f37021;"></i> 11 videos seleccionados · Haz clic en cualquier tarjeta para ver el video</p>
+        </div>
+
+        <!-- Categorías (organizadas por temas) -->
+        <section class="categoria">
+            <div class="categoria-titulo"><i class="fas fa-chart-line"></i> Conceptos fundamentales</div>
+            <div class="videos-grid" id="cat-fundamentos"></div>
+        </section>
+
+        <section class="categoria">
+            <div class="categoria-titulo"><i class="fas fa-tags"></i> Variables y clasificación</div>
+            <div class="videos-grid" id="cat-variables"></div>
+        </section>
+
+        <section class="categoria">
+            <div class="categoria-titulo"><i class="fas fa-table"></i> Tablas de frecuencias (base)</div>
+            <div class="videos-grid" id="cat-tablas-base"></div>
+        </section>
+
+        <section class="categoria">
+            <div class="categoria-titulo"><i class="fas fa-chart-gantt"></i> Tablas con intervalos</div>
+            <div class="videos-grid" id="cat-intervalos"></div>
+        </section>
+
+        <div class="footer">
+            <i class="fas fa-heart"></i> UPNFM · Material para SAN2803 · Videos seleccionados específicamente
+        </div>
+    </div>
+
+    <!-- Modal para reproducir video -->
+    <div id="videoModal" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h2 id="modal-titulo">Cargando video...</h2>
+                <button class="cerrar-modal" id="cerrarModalBtn">&times;</button>
+            </div>
+            <div class="video-wrapper" id="video-wrapper">
+                <!-- Aquí se inyectará el iframe -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos con los 11 videos proporcionados
+        const videos = [
+            // Conceptos fundamentales
+            {
+                id: 1,
+                cat: 'fundamentos',
+                titulo: 'Estadística: Introducción',
+                canal: 'YouTube',
+                duracion: '10:23',
+                desc: 'Conceptos básicos y aplicación de la estadística.',
+                icon: 'fa-chart-simple',
+                url: 'https://youtu.be/V9Zx1qJ9-EE?list=PLEwR-RTQiRPW6acWPgxcwEeTF08CiwA6-',
+                videoId: 'V9Zx1qJ9-EE'
+            },
+            {
+                id: 2,
+                cat: 'fundamentos',
+                titulo: 'Clasificación de la Estadística',
+                canal: 'YouTube',
+                duracion: '8:45',
+                desc: 'Estadística descriptiva vs. inferencial.',
+                icon: 'fa-diagram-project',
+                url: 'https://youtu.be/Sd5hxnxIKYA?list=PLEwR-RTQiRPW6acWPgxcwEeTF08CiwA6-',
+                videoId: 'Sd5hxnxIKYA'
+            },
+            {
+                id: 3,
+                cat: 'fundamentos',
+                titulo: 'Población y Muestra',
+                canal: 'YouTube',
+                duracion: '9:12',
+                desc: 'Diferencias clave y ejemplos.',
+                icon: 'fa-people-group',
+                url: 'https://youtu.be/G1sI8HXGFEw?list=PLEwR-RTQiRPW6acWPgxcwEeTF08CiwA6-',
+                videoId: 'G1sI8HXGFEw'
+            },
+            // Variables y clasificación
+            {
+                id: 4,
+                cat: 'variables',
+                titulo: 'Tipos de Variables',
+                canal: 'YouTube',
+                duracion: '7:30',
+                desc: 'Variables cualitativas y cuantitativas (discretas/continuas).',
+                icon: 'fa-shapes',
+                url: 'https://youtu.be/9F3ZCFuP7hU?list=PL68Z5hgAb4E4zGaAjswabOfk78gqb_QBV',
+                videoId: '9F3ZCFuP7hU'
+            },
+            // Tablas de frecuencias base
+            {
+                id: 5,
+                cat: 'tablas-base',
+                titulo: 'Tabla de frecuencias 1',
+                canal: 'YouTube',
+                duracion: '11:05',
+                desc: 'Construcción de tabla de frecuencias simple.',
+                icon: 'fa-table',
+                url: 'https://youtu.be/WEx4Sxrq9_c?list=PL68Z5hgAb4E4zGaAjswabOfk78gqb_QBV',
+                videoId: 'WEx4Sxrq9_c'
+            },
+            {
+                id: 6,
+                cat: 'tablas-base',
+                titulo: 'Tabla de frecuencias 2',
+                canal: 'YouTube',
+                duracion: '9:40',
+                desc: 'Frecuencia absoluta, relativa y acumulada.',
+                icon: 'fa-chart-column',
+                url: 'https://youtu.be/xq6tBKbg3HQ?list=PLiWRH3aE37VItjWpOg0FDV2w1o4IWJ1Om',
+                videoId: 'xq6tBKbg3HQ'
+            },
+            {
+                id: 7,
+                cat: 'tablas-base',
+                titulo: 'Tabulación de datos',
+                canal: 'YouTube',
+                duracion: '6:22',
+                desc: 'Organización de datos en tablas.',
+                icon: 'fa-sitemap',
+                url: 'https://youtu.be/6oLDbenzHrQ?list=PLEwR-RTQiRPW6acWPgxcwEeTF08CiwA6-',
+                videoId: '6oLDbenzHrQ'
+            },
+            {
+                id: 8,
+                cat: 'tablas-base',
+                titulo: 'Tabla de datos simple',
+                canal: 'YouTube',
+                duracion: '5:50',
+                desc: 'Ejemplo práctico de tabla simple.',
+                icon: 'fa-list-ul',
+                url: 'https://youtu.be/IHuZKvCh3Mc',
+                videoId: 'IHuZKvCh3Mc'
+            },
+            // Tablas con intervalos
+            {
+                id: 9,
+                cat: 'intervalos',
+                titulo: 'Tabla de frecuencias con intervalos',
+                canal: 'YouTube',
+                duracion: '12:15',
+                desc: 'Agrupación en intervalos de clase.',
+                icon: 'fa-chart-gantt',
+                url: 'https://youtu.be/fkB4j6hqsDU?list=PLiWRH3aE37VItjWpOg0FDV2w1o4IWJ1Om',
+                videoId: 'fkB4j6hqsDU'
+            },
+            {
+                id: 10,
+                cat: 'intervalos',
+                titulo: 'Tabla de frecuencias datos agrupados',
+                canal: 'YouTube',
+                duracion: '14:30',
+                desc: 'Regla de Sturges y marca de clase.',
+                icon: 'fa-calculator',
+                url: 'https://youtu.be/Nm7log51vFA',
+                videoId: 'Nm7log51vFA'
+            },
+            {
+                id: 11,
+                cat: 'intervalos',
+                titulo: 'Tabla de frecuencias por intervalos',
+                canal: 'YouTube',
+                duracion: '8:55',
+                desc: 'Ejemplo detallado con intervalos.',
+                icon: 'fa-chart-line',
+                url: 'https://youtu.be/BitnpiBPGc4',
+                videoId: 'BitnpiBPGc4'
+            }
+        ];
+
+        // Referencias al DOM
+        const modal = document.getElementById('videoModal');
+        const modalTitulo = document.getElementById('modal-titulo');
+        const videoWrapper = document.getElementById('video-wrapper');
+        const cerrarModal = document.getElementById('cerrarModalBtn');
+
+        // Función para abrir modal y reproducir video
+        function abrirVideo(video) {
+            modalTitulo.textContent = video.titulo;
+            // Insertar iframe de YouTube con el ID del video
+            videoWrapper.innerHTML = `
+                <iframe src="https://www.youtube.com/embed/${video.videoId}?autoplay=1" 
+                        title="${video.titulo}"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+            `;
+            modal.style.display = 'flex';
+        }
+
+        // Cerrar modal
+        function cerrarVideo() {
+            modal.style.display = 'none';
+            // Detener el video eliminando el iframe
+            videoWrapper.innerHTML = '';
+        }
+
+        cerrarModal.addEventListener('click', cerrarVideo);
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) cerrarVideo();
+        });
+
+        // Generar tarjetas
+        function generarTarjeta(video) {
+            return `
+                <div class="video-card" data-video-id="${video.id}">
+                    <div class="thumbnail">
+                        <i class="fas ${video.icon}"></i>
+                        <span class="duration-badge">${video.duracion}</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>${video.titulo}</h3>
+                        <span class="channel"><i class="fas fa-user"></i> ${video.canal}</span>
+                        <div class="card-meta">
+                            <span><i class="fas fa-clock"></i> ${video.duracion}</span>
+                        </div>
+                    </div>
+                    <div class="preview-overlay">
+                        <i class="fas ${video.icon}"></i>
+                        <p><strong>${video.canal}</strong> · ${video.duracion}</p>
+                        <p style="font-size:0.85rem;">${video.desc}</p>
+                        <span class="preview-link">
+                            <i class="fas fa-play"></i> Reproducir
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Renderizar al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            const contenedores = {
+                fundamentos: document.getElementById('cat-fundamentos'),
+                variables: document.getElementById('cat-variables'),
+                'tablas-base': document.getElementById('cat-tablas-base'),
+                intervalos: document.getElementById('cat-intervalos')
+            };
+
+            videos.forEach(video => {
+                const html = generarTarjeta(video);
+                contenedores[video.cat].innerHTML += html;
+            });
+
+            // Asignar evento de clic a cada tarjeta
+            document.querySelectorAll('.video-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // Prevenir que el clic en el botón de vista previa (que está dentro) cause doble evento
+                    if (e.target.closest('.preview-link')) {
+                        e.preventDefault();
+                    }
+                    const videoId = card.dataset.videoId;
+                    const video = videos.find(v => v.id == videoId);
+                    if (video) abrirVideo(video);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
