@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduteca de Bioestadística · UPNFM</title>
+    <!-- Font Awesome 6 (gratuito) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f6f9fc 0%, #e9f0f5 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .eduteca-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Encabezado */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #003366, #1a4d8c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header h1 i {
+            background: #f9c400;
+            color: #003366;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-size: 2rem;
+            box-shadow: 0 8px 16px rgba(0,51,102,0.15);
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: #1e3a5f;
+            max-width: 700px;
+            margin: 1rem auto 0;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(4px);
+            padding: 0.75rem 2rem;
+            border-radius: 60px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        /* Categorías */
+        .categoria {
+            margin-bottom: 3.5rem;
+        }
+
+        .categoria-titulo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #003366;
+            border-left: 6px solid #f9c400;
+            padding-left: 1.2rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .categoria-titulo i {
+            background: #003366;
+            color: #f9c400;
+            padding: 0.5rem;
+            border-radius: 16px;
+            font-size: 1.6rem;
+        }
+
+        /* Grid de videos */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem 1.5rem;
+        }
+
+        /* Tarjeta de video */
+        .video-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 12px 24px -8px rgba(0, 51, 102, 0.12);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            cursor: pointer;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 24px 36px -12px rgba(0, 51, 102, 0.25);
+            border-color: #f9c400;
+        }
+
+        /* Miniatura (placeholder) */
+        .thumbnail {
+            background: linear-gradient(145deg, #1e3a5f, #0f2b4a);
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .thumbnail i {
+            font-size: 4rem;
+            color: rgba(249, 196, 0, 0.5);
+            transition: 0.3s;
+        }
+
+        .video-card:hover .thumbnail i {
+            color: #f9c400;
+            transform: scale(1.1);
+        }
+
+        .thumbnail .duration-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Contenido de la tarjeta */
+        .card-content {
+            padding: 1.2rem 1rem 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #003366;
+            margin-bottom: 0.4rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: #4a6f8c;
+            margin: 0.5rem 0 0.6rem;
+        }
+
+        .card-meta i {
+            width: 16px;
+            color: #f9c400;
+        }
+
+        .channel {
+            font-weight: 600;
+            background: #eef3f8;
+            padding: 4px 10px;
+            border-radius: 40px;
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #1e3a5f;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Efecto de vista previa (overlay en hover) */
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,51,102,0.95) 0%, rgba(0,51,102,0.7) 100%);
+            backdrop-filter: blur(3px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            color: white;
+            text-align: center;
+            border-radius: 28px;
+            pointer-events: none;  /* para que no interfiera con el hover de la tarjeta */
+        }
+
+        .video-card:hover .preview-overlay {
+            opacity: 1;
+        }
+
+        .preview-overlay i {
+            font-size: 3rem;
+            color: #f9c400;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+
+        .preview-overlay p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            opacity: 0.9;
+            max-width: 90%;
+        }
+
+        .preview-overlay .preview-link {
+            margin-top: 1rem;
+            background: #f9c400;
+            color: #003366;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            pointer-events: auto;  /* para que se pueda hacer clic */
+            transition: 0.2s;
+        }
+
+        .preview-overlay .preview-link:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+
+        /* Responsividad */
+        @media (max-width: 720px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            .categoria-titulo {
+                font-size: 1.7rem;
+            }
+            .videos-grid {
+                gap: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 1.8rem; }
+            .categoria-titulo { font-size: 1.5rem; }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: #2c577a;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,51,102,0.2);
+            padding-top: 2rem;
+        }
+        .footer i {
+            color: #f37021;
+        }
+    </style>
+</head>
+<body>
+<div class="eduteca-container">
+    <div class="header">
+        <h1>
+            <i class="fas fa-graduation-cap"></i> Bioestadística · Eduteca
+        </h1>
+        <p><i class="fas fa-play-circle" style="color:#f37021;"></i> 20+ videos organizados por temas · Pasa el cursor para vista previa</p>
+    </div>
+
+    <!-- Categoría 1: La estadística como herramienta (5 videos) -->
+    <section class="categoria">
+        <div class="categoria-titulo">
+            <i class="fas fa-chart-line"></i>
+            <span>1. La estadística como herramienta</span>
+        </div>
+        <div class="videos-grid" id="cat1"></div>
+    </section>
+
+    <!-- Categoría 2: Tipos de variables y escalas (5 videos) -->
+    <section class="categoria">
+        <div class="categoria-titulo">
+            <i class="fas fa-tags"></i>
+            <span>2. Tipos de variables y escalas</span>
+        </div>
+        <div class="videos-grid" id="cat2"></div>
+    </section>
+
+    <!-- Categoría 3: Tabulación y frecuencias (5 videos) -->
+    <section class="categoria">
+        <div class="categoria-titulo">
+            <i class="fas fa-table"></i>
+            <span>3. Tabulación y distribuciones de frecuencias</span>
+        </div>
+        <div class="videos-grid" id="cat3"></div>
+    </section>
+
+    <!-- Categoría 4: Tasas y porcentajes (5 videos) -->
+    <section class="categoria">
+        <div class="categoria-titulo">
+            <i class="fas fa-percent"></i>
+            <span>4. Tasas y porcentajes aplicados</span>
+        </div>
+        <div class="videos-grid" id="cat4"></div>
+    </section>
+
+    <div class="footer">
+        <i class="fas fa-heart"></i> UPNFM · Material didáctico para SAN2803 · Videos simulados con fines educativos
+    </div>
+</div>
+
+<script>
+    // Base de datos de videos (20+)
+    const videos = [
+        // CATEGORÍA 1: HERRAMIENTA (índices 0-4)
+        {
+            cat: 1,
+            titulo: "Estadística: Introducción (Qué es la Estadística)",
+            canal: "Profesor Particular",
+            duracion: "10:15",
+            desc: "Conceptos básicos, población, muestra y las etapas del método estadístico.",
+            icon: "fa-chart-simple"
+        },
+        {
+            cat: 1,
+            titulo: "Estadística descriptiva e inferencial",
+            canal: "Matemóvil",
+            duracion: "7:42",
+            desc: "Diferencias clave entre las dos ramas con ejemplos claros.",
+            icon: "fa-chart-gantt"
+        },
+        {
+            cat: 1,
+            titulo: "Método Estadístico: Pasos para una Investigación",
+            canal: "Aprendiendo con Zully",
+            duracion: "8:20",
+            desc: "Formulación, recolección, organización, análisis e interpretación.",
+            icon: "fa-magnifying-glass-chart"
+        },
+        {
+            cat: 1,
+            titulo: "¿Para qué sirve la estadística en ciencias de la salud?",
+            canal: "Salud Pública",
+            duracion: "12:05",
+            desc: "Aplicaciones concretas en investigación sanitaria y educativa.",
+            icon: "fa-stethoscope"
+        },
+        {
+            cat: 1,
+            titulo: "Población y Muestra | Estadística",
+            canal: "Matemáticas profe Alex",
+            duracion: "9:30",
+            desc: "Diferencia fundamental y cómo seleccionar una muestra representativa.",
+            icon: "fa-people-group"
+        },
+        // CATEGORÍA 2: VARIABLES (5-9)
+        {
+            cat: 2,
+            titulo: "Tipos de Variables: Cualitativas y Cuantitativas",
+            canal: "Matemóvil",
+            duracion: "6:18",
+            desc: "Ejemplos de la vida cotidiana para entender la clasificación.",
+            icon: "fa-shapes"
+        },
+        {
+            cat: 2,
+            titulo: "Escalas de Medición: Nominal, Ordinal, Intervalo y Razón",
+            canal: "Estadística con Jorge",
+            duracion: "12:45",
+            desc: "Propiedades de cada escala y cómo identificarlas.",
+            icon: "fa-ruler"
+        },
+        {
+            cat: 2,
+            titulo: "Clasificación de Variables (Ejercicios Resueltos)",
+            canal: "Academia Internet",
+            duracion: "15:10",
+            desc: "Practica con ejercicios de investigación educativa y de salud.",
+            icon: "fa-pen-to-square"
+        },
+        {
+            cat: 2,
+            titulo: "Variable cualitativa vs cuantitativa - Ejemplos para niños",
+            canal: "FlexFlix Kids",
+            duracion: "4:25",
+            desc: "Video didáctico y sencillo para repasar los fundamentos.",
+            icon: "fa-child"
+        },
+        {
+            cat: 2,
+            titulo: "Escala de Likert y variables ordinales",
+            canal: "Investigación con Gusto",
+            duracion: "11:02",
+            desc: "Aplicación de la escala ordinal en encuestas de satisfacción.",
+            icon: "fa-list-check"
+        },
+        // CATEGORÍA 3: TABULACIÓN (10-14)
+        {
+            cat: 3,
+            titulo: "Tabla de frecuencias para datos no agrupados",
+            canal: "Matemóvil",
+            duracion: "8:50",
+            desc: "Frecuencia absoluta, relativa y acumulada paso a paso.",
+            icon: "fa-chart-column"
+        },
+        {
+            cat: 3,
+            titulo: "Tabla de frecuencias agrupada en intervalos (Ejemplo 1)",
+            canal: "Matemáticas profe Alex",
+            duracion: "16:30",
+            desc: "Rango, regla de Sturges, marca de clase y frecuencias.",
+            icon: "fa-chart-gantt"
+        },
+        {
+            cat: 3,
+            titulo: "Regla de Sturges: ¿Cómo calcular el número de intervalos?",
+            canal: "Profesor Particular",
+            duracion: "7:15",
+            desc: "Fórmula y ejemplos para datos agrupados.",
+            icon: "fa-calculator"
+        },
+        {
+            cat: 3,
+            titulo: "Cómo hacer una tabla de frecuencias en Excel",
+            canal: "Helingeniero",
+            duracion: "14:20",
+            desc: "Tutorial práctico para usar Excel en tus ejercicios.",
+            icon: "fa-file-excel"
+        },
+        {
+            cat: 3,
+            titulo: "Frecuencia relativa, absoluta y acumulada (ejercicios)",
+            canal: "Sergio Ruiz",
+            duracion: "7:45",
+            desc: "Ejemplos variados para afianzar los conceptos.",
+            icon: "fa-chart-pie"
+        },
+        // CATEGORÍA 4: TASAS (15-19)
+        {
+            cat: 4,
+            titulo: "Porcentajes: Incremento y Disminución Porcentual",
+            canal: "Matemóvil",
+            duracion: "9:10",
+            desc: "Aprende a calcular variaciones porcentuales en contextos reales.",
+            icon: "fa-arrow-up"
+        },
+        {
+            cat: 4,
+            titulo: "Indicadores de Salud: Tasas de Mortalidad y Natalidad",
+            canal: "Aprendiendo Epidemiología",
+            duracion: "11:40",
+            desc: "Cálculo e interpretación de tasas demográficas.",
+            icon: "fa-heart-pulse"
+        },
+        {
+            cat: 4,
+            titulo: "Tasa de Deserción y Eficiencia Terminal en Educación",
+            canal: "Educativa",
+            duracion: "8:35",
+            desc: "Cómo medir estos indicadores educativos clave.",
+            icon: "fa-school"
+        },
+        {
+            cat: 4,
+            titulo: "Tasa de Analfabetismo: Cálculo e Interpretación",
+            canal: "Geografía Historia",
+            duracion: "6:50",
+            desc: "Indicador social con datos reales de Honduras.",
+            icon: "fa-book-open"
+        },
+        {
+            cat: 4,
+            titulo: "Tasa Bruta de Natalidad y Mortalidad (ejercicio)",
+            canal: "Estadística Fácil",
+            duracion: "10:00",
+            desc: "Resolución paso a paso con datos poblacionales.",
+            icon: "fa-baby"
+        },
+        // EXTRA por si queremos 20, ya tenemos 20. Agreguemos 2 más para redondear (opcional)
+        {
+            cat: 4,
+            titulo: "Razón, proporción y tasa: diferencias",
+            canal: "Salud Cuantitativa",
+            duracion: "13:20",
+            desc: "Conceptos clave para no confundir en investigación.",
+            icon: "fa-divide"
+        },
+        {
+            cat: 2,
+            titulo: "Ejemplo de variable de intervalo: temperatura",
+            canal: "Ciencias con Juan",
+            duracion: "5:55",
+            desc: "Por qué la temperatura en °C no es de razón.",
+            icon: "fa-temperature-high"
+        }
+    ];
+
+    // Función para generar el HTML de cada tarjeta
+    function generarTarjeta(video, index) {
+        const icono = video.icon || "fa-play-circle";
+        // usamos un placeholder de color para simular la miniatura
+        return `
+            <div class="video-card" data-index="${index}">
+                <div class="thumbnail">
+                    <i class="fas ${icono}"></i>
+                    <span class="duration-badge">${video.duracion}</span>
+                </div>
+                <div class="card-content">
+                    <h3>${video.titulo}</h3>
+                    <span class="channel"><i class="fas fa-user"></i> ${video.canal}</span>
+                    <div class="card-meta">
+                        <span><i class="fas fa-clock"></i> ${video.duracion}</span>
+                    </div>
+                </div>
+                <!-- Vista previa overlay (hover) -->
+                <div class="preview-overlay">
+                    <i class="fas ${icono}"></i>
+                    <p><strong>${video.canal}</strong> · ${video.duracion}</p>
+                    <p style="font-size:0.85rem;">${video.desc}</p>
+                    <a href="#" class="preview-link" onclick="event.preventDefault(); alert('Enlace simulado a YouTube: ${video.titulo}');"><i class="fas fa-play"></i> Ver ahora</a>
+                </div>
+            </div>
+        `;
+    }
+
+    // Renderizar cada categoría
+    document.addEventListener("DOMContentLoaded", () => {
+        const cat1 = document.getElementById("cat1");
+        const cat2 = document.getElementById("cat2");
+        const cat3 = document.getElementById("cat3");
+        const cat4 = document.getElementById("cat4");
+
+        videos.forEach((video, idx) => {
+            const tarjeta = generarTarjeta(video, idx);
+            if (video.cat === 1) cat1.innerHTML += tarjeta;
+            else if (video.cat === 2) cat2.innerHTML += tarjeta;
+            else if (video.cat === 3) cat3.innerHTML += tarjeta;
+            else if (video.cat === 4) cat4.innerHTML += tarjeta;
+        });
+
+        // Pequeño ajuste: si alguna categoría no tiene exactamente 5, pero tenemos más de 20, está bien.
+        // Aseguramos que cada categoría tenga al menos 5 (el array las distribuye)
+        // Se agregaron 22 videos, así que sobran 2 en cat2 y cat4 según asignación, perfecto.
+    });
+</script>
+
+<!-- Nota: Los enlaces son simulados (alert) para demostración. En producción reemplazar con URLs reales. -->
+</body>
+</html>
